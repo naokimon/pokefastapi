@@ -2,7 +2,7 @@ import csv
 import aiosqlite
 
 BATCH_SIZE = 200
-DATABASE = "app.db"
+DATABASE = "app/app.db"
 
 async def init_db():
     async with aiosqlite.connect(DATABASE) as db:
@@ -24,7 +24,7 @@ async def init_db():
         )
         """)
 
-        with open("../data/pokemon.csv", newline="", encoding="utf-8") as file:
+        with open("data/pokemon.csv", newline="", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             batch = []
 
@@ -43,29 +43,29 @@ async def init_db():
                     row["Speed"],
                     row["Generation"],
                 ))
-            if len(batch) >= BATCH_SIZE:
-                await db.executemany(
-                    """
-                    INSERT INTO pokemons (
-                        name,
-                        form,
-                        type1,
-                        type2,
-                        total,
-                        hp,
-                        attack,
-                        defense,
-                        special_attack,
-                        special_defense,
-                        speed,
-                        generation
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                    """,
-                    batch
-                )
+                if len(batch) >= BATCH_SIZE:
+                    await db.executemany(
+                        """
+                        INSERT INTO pokemons (
+                            name,
+                            form,
+                            type1,
+                            type2,
+                            total,
+                            hp,
+                            attack,
+                            defense,
+                            special_attack,
+                            special_defense,
+                            speed,
+                            generation
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        """,
+                        batch
+                    )
 
-                await db.commit()
-                batch.clear()
+                    await db.commit()
+                    batch.clear()
 
             if batch:
                 await db.executemany(
