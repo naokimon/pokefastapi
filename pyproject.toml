@@ -1,0 +1,14 @@
+[project]
+name = "PokeFastAPI"
+version = "0.1.0-beta"
+description = "A remake of PokeAPI using FastAPI."
+authors = [
+    { name = "naokimon", email = "nathancruzmartinez@gmail.com" }
+]
+dependencies = [
+    "fastapi>=0.141.1,<0.142.0",
+    "aiosqlite>=0.22.1,<0.23.0",
+    "uvicorn>=0.54.0,<0.55.0"
+]
+
+requires-python = ">=3.14,<4.0"
