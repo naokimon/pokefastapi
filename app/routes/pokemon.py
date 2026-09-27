@@ -1,13 +1,9 @@
-from fastapi import FastAPI, HTTPException
-from db import search_pokemon
+from fastapi import APIRouter, HTTPException
+from app.db import search_pokemon
 
-app = FastAPI()
+router = APIRouter()
 
-@app.get("/")
-def read_root():
-    return {"Root": "This is the root of the API."}
-
-@app.get("/pokemon/{identifier}")
+@router.get("/pokemon/{identifier}")
 async def get_pokemon(identifier: str):
     data = await search_pokemon(identifier)
     if data:
