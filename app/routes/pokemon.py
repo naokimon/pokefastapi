@@ -6,7 +6,7 @@ router = APIRouter()
 
 @router.get("/pokemon")
 async def get_pokemons(request: Request, limit: int = 20, offset: int = 0, sort: str = "", direction: str = "ASC"):
-    if limit > 0 or offset > 0:
+    if limit > 0 or offset >= 0:
         if len(sort) > 1:
             allowed_sorts: list[str] = ["id", "name", "form", "type1", "type2", "total", "hp", "attack", "defense", "special_attack", "special_defense", "speed", "generation"]
             allowed_direction: list[str] = ["ASC", "DESC"]
