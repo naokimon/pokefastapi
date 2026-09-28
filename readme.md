@@ -176,15 +176,15 @@ with HTTP status `404`.
 
 A Pokémon object contains:
 
-| Field       | Type    | Description                      |
-|-------------|---------|----------------------------------|
-| `id`        | integer | Pokémon ID.                      |
-| `name`      | string  | Pokémon name.                    |
-| `form`      | string  | null                             | Pokémon form, if applicable. |
-| `gen`       | integer | Pokémon generation.              |
-| `image_uri` | string  | Pokémon's Official Artwork image |
-| `types`     | array   | Pokémon's type(s).               |
-| `stats`     | array   | Pokémon's base stats.            |
+| Field       | Type          | Description                      |
+|-------------|---------------|----------------------------------|
+| `id`        | integer       | Pokémon ID.                      |
+| `name`      | string        | Pokémon name.                    |
+| `form`      | string / null | Pokémon form, if applicable.     |
+| `gen`       | integer       | Pokémon generation.              |
+| `image_uri` | string        | Pokémon's Official Artwork image |
+| `types`     | array         | Pokémon's type(s).               |
+| `stats`     | array         | Pokémon's base stats.            |
 
 Each item in `types` contains a `slot` and a `type.name`.
 
