@@ -2,6 +2,16 @@ import aiosqlite
 
 DATABASE = "app/app.db"
 
+async def count_pokemons():
+    async with aiosqlite.connect(DATABASE) as db:
+        cursor = await db.execute(
+            "SELECT COUNT(*) FROM pokemons"
+        )
+
+        rows = await cursor.fetchone()
+
+        return rows[0]
+
 async def get_pokemons(limit: int = 20, offset: int = 0, sort: str = "", direction: str = "ASC"):
     async with aiosqlite.connect(DATABASE) as db:
         db.row_factory = aiosqlite.Row
