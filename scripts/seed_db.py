@@ -29,8 +29,7 @@ async def init_db():
         )
 
         exists = await cursor.fetchone()
-
-        if exists[0]:
+        if exists[0] == 0:
             with open("data/pokemon.csv", newline="", encoding="utf-8") as file:
                 reader = csv.DictReader(file)
                 batch = []
