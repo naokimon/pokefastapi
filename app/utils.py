@@ -15,7 +15,7 @@ def parsepokemon(data: dict):
         "stats": [],
     }
 
-    if data["type2"]:
+    if len(data["type2"]) > 1:
         type2 = {
             "slot": 2,
             "type": {
