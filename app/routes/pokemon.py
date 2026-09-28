@@ -15,7 +15,7 @@ async def get_pokemons(request: Request, limit: int = 20, offset: int = 0, sort:
             if sort in allowed_sorts and direction in allowed_direction:
                 data: dict = await db.get_pokemons(limit, offset, sort=sort, direction=direction)
             else:
-                raise HTTPException(status_code=404, detail=f"The sort: {sort} or (and) direction: {direction} is invalid!")
+                raise HTTPException(status_code=400, detail=f"The sort: {sort} or (and) direction: {direction} is invalid!")
         return_data = {
             "count": len(data),
             "next": str(
