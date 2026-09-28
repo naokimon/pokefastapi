@@ -20,7 +20,8 @@ async def init_db():
             special_attack INTEGER,
             special_defense INTEGER,
             speed INTEGER,
-            generation INTEGER
+            generation INTEGER,
+            image_uri TEXT
         )
         """)
 
@@ -48,6 +49,7 @@ async def init_db():
                         row["Sp. Def"],
                         row["Speed"],
                         row["Generation"],
+                        row["image_uri"]
                     ))
                     if len(batch) >= BATCH_SIZE:
                         await db.executemany(
@@ -64,8 +66,9 @@ async def init_db():
                                 special_attack,
                                 special_defense,
                                 speed,
-                                generation
-                            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                generation,
+                                image_uri
+                            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                             """,
                             batch
                         )
@@ -88,8 +91,9 @@ async def init_db():
                             special_attack,
                             special_defense,
                             speed,
-                            generation
-                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            generation,
+                            image_uri
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         """,
                         batch
                     )
