@@ -2,10 +2,11 @@ from fastapi import APIRouter, HTTPException, Request
 import app.db as db
 from app.db import count_pokemons
 from app.utils import parsepokemon
+from app.schemas import PokemonsResponse, PokemonResponse
 
 router = APIRouter()
 
-@router.get("/pokemon")
+@router.get("/pokemon", response_model=PokemonsResponse)
 async def get_pokemons(request: Request, limit: int = 20, offset: int = 0, sort: str = "", direction: str = "ASC"):
     if limit > 0 or offset >= 0:
         if len(sort) > 1:
@@ -55,7 +56,7 @@ async def get_pokemons(request: Request, limit: int = 20, offset: int = 0, sort:
     else:
         raise HTTPException(status_code=404, detail="Limit and or Offset must be greater then 0!")
 
-@router.get("/pokemon/{identifier}")
+@router.get("/pokemon/{identifier}", response_model=PokemonResponse)
 async def get_pokemon(identifier: str):
     data = await db.search_pokemon(identifier)
     if data:
