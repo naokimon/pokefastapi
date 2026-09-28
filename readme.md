@@ -194,7 +194,8 @@ Each item in `stats` contains a `base_stat` and a `stat.name`.
 ## HTTP Errors
 
 | Status | Condition                             |
-| ------ | ------------------------------------- |
+|--------|---------------------------------------|
+| `400`  | `limit` is less than or equal to `0`. |
+| `400`  | `offset` is less than `0`.            |
 | `404`  | Pokémon was not found.                |
-| `404`  | `limit` is less than or equal to `0`. |
 
