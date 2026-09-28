@@ -24,26 +24,57 @@ async def init_db():
         )
         """)
 
-        with open("data/pokemon.csv", newline="", encoding="utf-8") as file:
-            reader = csv.DictReader(file)
-            batch = []
+        cursor = await db.execute(
+            "SELECT EXISTS(SELECT 1 FROM pokemons)"
+        )
 
-            for row in reader:
-                batch.append((
-                    row["Name"],
-                    row["Form"],
-                    row["Type1"],
-                    row["Type2"],
-                    row["Total"],
-                    row["HP"],
-                    row["Attack"],
-                    row["Defense"],
-                    row["Sp. Atk"],
-                    row["Sp. Def"],
-                    row["Speed"],
-                    row["Generation"],
-                ))
-                if len(batch) >= BATCH_SIZE:
+        exists = await cursor.fetchone()
+
+        if exists[0]:
+            with open("data/pokemon.csv", newline="", encoding="utf-8") as file:
+                reader = csv.DictReader(file)
+                batch = []
+
+                for row in reader:
+                    batch.append((
+                        row["Name"],
+                        row["Form"],
+                        row["Type1"],
+                        row["Type2"],
+                        row["Total"],
+                        row["HP"],
+                        row["Attack"],
+                        row["Defense"],
+                        row["Sp. Atk"],
+                        row["Sp. Def"],
+                        row["Speed"],
+                        row["Generation"],
+                    ))
+                    if len(batch) >= BATCH_SIZE:
+                        await db.executemany(
+                            """
+                            INSERT INTO pokemons (
+                                name,
+                                form,
+                                type1,
+                                type2,
+                                total,
+                                hp,
+                                attack,
+                                defense,
+                                special_attack,
+                                special_defense,
+                                speed,
+                                generation
+                            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            """,
+                            batch
+                        )
+
+                        await db.commit()
+                        batch.clear()
+
+                if batch:
                     await db.executemany(
                         """
                         INSERT INTO pokemons (
@@ -65,27 +96,3 @@ async def init_db():
                     )
 
                     await db.commit()
-                    batch.clear()
-
-            if batch:
-                await db.executemany(
-                    """
-                    INSERT INTO pokemons (
-                        name,
-                        form,
-                        type1,
-                        type2,
-                        total,
-                        hp,
-                        attack,
-                        defense,
-                        special_attack,
-                        special_defense,
-                        speed,
-                        generation
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                    """,
-                    batch
-                )
-
-                await db.commit()
