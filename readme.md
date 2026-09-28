@@ -36,10 +36,12 @@ Returns a paginated list of Pokémon.
 
 #### Query Parameters
 
-| Parameter | Type    | Default | Description                                            |
-| --------- | ------- | ------: | ------------------------------------------------------ |
-| `limit`   | integer |    `20` | Number of Pokémon to return. Must be greater than `0`. |
-| `offset`  | integer |     `0` | Number of Pokémon to skip.                             |
+| Parameter   | Type    | Default | Description                                      |
+|-------------|---------|---------|--------------------------------------------------|
+| `limit`     | integer | `20`    | Number of Pokémon to return. Must be greater than `0`. |
+| `offset`    | integer | `0`     | Number of Pokémon to skip.                       |
+| `sort`      | string  | —       | Sort Pokémon by any of their database fields.    |
+| `direction` | string  | `ASC`   | Sorting direction: `ASC` or `DESC`.              |
 
 #### Example
 
