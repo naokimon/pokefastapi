@@ -2,13 +2,19 @@ import aiosqlite
 
 DATABASE = "app/app.db"
 
-async def get_pokemons(limit: int, offset: int = 0):
+async def get_pokemons(limit: int = 20, offset: int = 0, sort: str = "", direction: str = "ASC"):
     async with aiosqlite.connect(DATABASE) as db:
         db.row_factory = aiosqlite.Row
-        cursor = await db.execute(
-            "SELECT * FROM pokemons LIMIT ? OFFSET ?",
-            (limit, offset)
-        )
+        if len(sort) > 1:
+            cursor = await db.execute(
+                f"SELECT * FROM pokemons ORDER BY {sort} {direction} LIMIT ? OFFSET ?",
+                (limit, offset,)
+            )
+        else:
+            cursor = await db.execute(
+                "SELECT * FROM pokemons LIMIT ? OFFSET ?",
+                (limit, offset,)
+            )
 
         rows = await cursor.fetchall()
 
