@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Request
 import app.db as db
+from app.db import count_pokemons
 from app.utils import parsepokemon
 
 router = APIRouter()
@@ -12,26 +13,37 @@ async def get_pokemons(request: Request, limit: int = 20, offset: int = 0, sort:
             allowed_direction: list[str] = ["ASC", "DESC"]
             sort = sort.lower()
             direction = direction.upper()
-            if sort in allowed_sorts and direction in allowed_direction:
-                data: dict = await db.get_pokemons(limit, offset, sort=sort, direction=direction)
-            else:
+            if not sort in allowed_sorts and not direction in allowed_direction:
                 raise HTTPException(status_code=400, detail=f"The sort: {sort} or (and) direction: {direction} is invalid!")
+
+        data: dict = await db.get_pokemons(limit, offset, sort=sort, direction=direction)
+
+        params = {
+            "limit": limit,
+            "sort": sort,
+            "direction": direction
+        }
+
+        if not sort:
+            params.pop("sort")
+            params.pop("direction")
+
+        db_length = await count_pokemons()
+
+        offset = min(db_length, offset)
+
         return_data = {
             "count": len(data),
             "next": str(
                 request.url.include_query_params(
-                    limit=limit,
-                    offset=offset + limit,
-                    sort=sort if len(sort) > 1 else None,
-                    direction=direction if len(sort) > 1 else None
+                    **params,
+                    offset=offset + limit
                 )
-            ),
+            ) if offset < (db_length - 1) else None,
             "previous": str(
                 request.url.include_query_params(
-                    limit=limit,
-                    offset=offset - limit,
-                    sort=sort if len(sort) > 1 else None,
-                    direction=direction if len(sort) > 1 else None
+                    **params,
+                    offset=max(0, offset - limit)
                 )
             ) if offset > 0 else None,
             "results": []
