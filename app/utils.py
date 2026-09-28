@@ -4,6 +4,7 @@ def parsepokemon(data: dict):
         "name": data["name"],
         "form": data["form"] if len(data["form"]) > 1 else None,
         "gen": data["generation"],
+        "image_uri": data["image_uri"],
         "types": [
             {
                 "slot": 1,
