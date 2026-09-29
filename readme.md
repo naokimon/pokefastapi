@@ -30,6 +30,22 @@ Returns a simple API status message.
 
 ---
 
+## Rate Limiting
+
+All API routes are limited to **2 requests per second per client IP address** using SlowAPI.
+
+When the rate limit is exceeded, the API returns HTTP status `429 Too Many Requests`.
+
+#### Response
+
+```json
+{
+  "error": "Rate limit exceeded: 2 per 1 second"
+}
+```
+
+---
+
 ### `GET /pokemon`
 
 Returns a paginated list of Pokémon.
@@ -172,6 +188,35 @@ with HTTP status `404`.
 
 ---
 
+### `GET /debug`
+
+Returns the client's IP address and forwarded IP headers. Useful for debugging IP detection when running behind a reverse proxy such as Railway.
+
+This endpoint is also limited to **2 requests per second**.
+
+#### Response
+
+```json
+{
+  "client": "100.64.0.2",
+  "forwarded_for": "195.169.184.44, 152.233.12.241",
+  "real_ip": "195.169.184.44"
+}
+```
+
+#### Response Fields
+
+| Field           | Type          | Description                                                      |
+| --------------- | ------------- | ---------------------------------------------------------------- |
+| `client`        | string / null | Client IP address detected by FastAPI.                           |
+| `forwarded_for` | string / null | Client and proxy IP addresses from the `X-Forwarded-For` header. |
+| `real_ip`       | string / null | Client IP address from the `X-Real-IP` header.                   |
+
+When running behind a reverse proxy, `client` may contain the proxy's internal IP address instead of the original client's IP. Forwarded IP headers may be `null` when running locally.
+
+---
+
+
 ## Pokémon Object
 
 A Pokémon object contains:
@@ -199,4 +244,5 @@ Each item in `stats` contains a `base_stat` and a `stat.name`.
 | `400`  | `limit` is less than or equal to `0`. |
 | `400`  | `offset` is less than `0`.            |
 | `404`  | Pokémon was not found.                |
+| `429`  | Too many requests.                    |
 
