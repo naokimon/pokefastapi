@@ -67,11 +67,10 @@ async def get_pokemon(request: Request, identifier: str):
     else:
         raise HTTPException(status_code=404, detail="Pokemon not found!")
 
-# @router.get("/debug")
-# async def debug(request: Request):
-#     return {
-#         "url": str(request.url),
-#         "host": request.headers.get("host"),
-#         "server": request.scope.get("server"),
-#         "scheme": request.url.scheme,
-#     }
+@router.get("/debug")
+async def debug_ip(request: Request):
+    return {
+        "client": request.client.host if request.client else None,
+        "forwarded_for": request.headers.get("x-forwarded-for"),
+        "real_ip": request.headers.get("x-real-ip"),
+    }
