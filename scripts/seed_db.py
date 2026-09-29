@@ -1,9 +1,8 @@
 import csv
 import aiosqlite
-import os
 
 BATCH_SIZE = 200
-DATABASE = os.getenv("DATABASE_PATH", "app/app.db")
+DATABASE = "app/app.db"
 
 async def init_db():
     async with aiosqlite.connect(DATABASE) as db:

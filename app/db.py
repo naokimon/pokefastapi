@@ -1,7 +1,6 @@
 import aiosqlite
-import os
 
-DATABASE = os.getenv(DATABASE_PATH, "app/app.db")
+DATABASE = "app/app.db"
 
 async def count_pokemons():
     async with aiosqlite.connect(DATABASE) as db:
