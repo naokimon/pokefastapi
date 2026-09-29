@@ -26,3 +26,8 @@ class PokemonsResponse(BaseModel):
     next: str | None
     previous: str | None
     results: list[PokemonResponse]
+
+class DebugResponse(BaseModel):
+    client: str | None
+    forwarded_for: str | None
+    real_ip: str | None
