@@ -61,7 +61,7 @@ async def get_pokemons(request: Request, limit: int = 20, offset: int = 0, sort:
 @router.get("/pokemon/{identifier}", response_model=PokemonResponse)
 @limiter.limit("2/1second")
 async def get_pokemon(request: Request, identifier: str):
-    data = await db.search_pokemon(identifier)
+    data = await db.search_pokemon(identifier.capitalize())
     if data:
         return parsepokemon(data)
     else:
