@@ -68,6 +68,7 @@ async def get_pokemon(request: Request, identifier: str):
         raise HTTPException(status_code=404, detail="Pokemon not found!")
 
 @router.get("/debug")
+@limiter.limit("2/1second")
 async def debug_ip(request: Request):
     return {
         "client": request.client.host if request.client else None,
